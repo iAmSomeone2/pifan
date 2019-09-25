@@ -1,0 +1,18 @@
+# Maintainer: Brenden Davidson <davidson.brenden15@gmail.com>
+# Contributor: Brenden Davidson <davidson.brenden15@gmail.com>
+
+pkgbase=pifan
+pkgname=('pifand' 'pifan-cli' 'pifan-gtk')
+pkgver=0.1
+pkgrel=1
+pkgdesc="A small suite of tools to control a 2 or 3-pin fan connected to the Raspberry Pi's GPIO pins."
+arch=('aarch64')
+
+makedepends=(
+    'cmake'
+    'python-pigpio'
+    'cairo'
+    'pkgconf'
+    'goobject-introspection'
+    'gtk3'
+    'python>=3.7.0')

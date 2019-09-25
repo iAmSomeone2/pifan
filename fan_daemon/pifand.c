@@ -42,8 +42,7 @@ int main(void) {
             break;
         }
         // Pause loop
-        int wait_time = get_wait_time();
-        sleep(wait_time);
+        sleep(DEFAULT_UPDATE_INTERVAL);
     }
 
     printf("\nTurning off fan control daemon...\n");
