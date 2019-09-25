@@ -4,6 +4,7 @@
 #include <pigpiod_if2.h>
 
 #include "hardware.h"
+#include "data_access.h"
 
 static volatile __uint8_t active = 1;
 
@@ -11,7 +12,7 @@ static volatile __uint8_t active = 1;
     Sets active to 0 when a SIGINT or SIGTERM signal is received.
     This allows the fan daemon to gracefully shutdown.
 */
-void interrupt_handler(int interrupt) {
+void interrupt_handler() {
 	active = 0;
 }
 
@@ -22,7 +23,7 @@ int main(void) {
 	    fprintf(stderr, "Failed to connect to pigpio daemon.\n");
 	    return 1;
     }
-    fprintf(stdout, "Successfully connected to pigpio daemon.\n\n");
+    fprintf(stdout, "Successfully connected to pigpio daemon.\n");
 
     int init_result = initialize_pins(rPi);
     if (init_result != 0) {
@@ -41,7 +42,8 @@ int main(void) {
             break;
         }
         // Pause loop
-        sleep(DEFAULT_UPDATE_INTERVAL);
+        int wait_time = get_wait_time();
+        sleep(wait_time);
     }
 
     printf("\nTurning off fan control daemon...\n");

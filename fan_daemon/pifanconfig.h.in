@@ -1,0 +1,7 @@
+#ifndef PIFANCONFIG_H
+#define PIFANCONFIG_H 1
+
+#cmakedefine CONFIG_FILE_PATH 	"@CONFIG_FILE_PATH@"
+#cmakedefine THERMAL_FILE_PATH	"@THERMAL_FILE_PATH@"
+
+#endif

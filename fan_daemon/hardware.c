@@ -2,29 +2,10 @@
 #include <unistd.h>
 #include <pigpiod_if2.h>
 
-#include "hardware.h"
+#include <pifanconfig.h>
+#include "data_access.h"
 
-/*
-    Retrieves the current CPU temp from the system.
-    To get temp in degrees C, divide by 1000.
-*/
-int cpu_temp() {
-    int temperature = 0;
-    FILE *file = fopen(THERMAL_FILE_PATH, "r");
-    if (file == NULL) {
-        fprintf(stderr, "CPU temp could not be read from: %s\n", THERMAL_FILE_PATH);
-        return 0;
-    }
-    
-    int result = fscanf(file, "%d", &temperature);
-    if (result == EOF) {
-        fprintf(stderr, "%s is in an unrecognized format.\n", THERMAL_FILE_PATH);
-        return 0;
-    }
-    
-    fclose(file);
-    return temperature; 
-}
+#include "hardware.h"
 
 /*
     Sets whether the fan is on or off.
@@ -79,21 +60,11 @@ int initialize_pins(int pi) {
     Determines whether the fan should run or not based on the current CPU
     temp and the target temp in pifan.conf.
 */
-__uint8_t determine_fan_status(int pi) {
+__uint8_t determine_fan_status() {
     __uint8_t fan_status = 0;
-    volatile int target_temp = 0;
-    
-    FILE *config_file = fopen(CONFIG_FILE_PATH, "r");
-    if (config_file == NULL) {
-        fprintf(stdout, "Couldn't open %s\nSetting target temp to default of %d°C\n", CONFIG_FILE_PATH, DEFAULT_TARGET_TEMP);
-        target_temp = DEFAULT_TARGET_TEMP;
-    } else {
-        int result = fscanf(config_file, "target_temp=%d", &target_temp);
-        if (result == EOF) {
-            fprintf(stdout, "Couldn't read the target temp from %s\nSetting target temp to default of %d°C\n", CONFIG_FILE_PATH, DEFAULT_TARGET_TEMP);
-            target_temp = DEFAULT_TARGET_TEMP;
-        }
-        fclose(config_file);
+    int target_temp = get_target_temp();
+    if (target_temp == 0) {
+        fprintf(stdout, "There was a problem reading %s\nDefaulting to %d°C\n", CONFIG_FILE_PATH, DEFAULT_TARGET_TEMP);
     }
     
     int current_temp = cpu_temp();
