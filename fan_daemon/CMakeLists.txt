@@ -10,7 +10,7 @@ set(THERMAL_FILE_PATH /sys/class/thermal/thermal_zone0/temp)
 
 configure_file(pifanconfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/pifanconfig.h)
 
-set(CMAKE_C_FLAGS "-Wall -Wextra -lpthread -lrt -lpigpiod_if2")
+set(CMAKE_C_FLAGS "-Wall -Wextra")
 
 find_package(pigpio REQUIRED)
 

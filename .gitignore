@@ -16,7 +16,5 @@ _deps
 **/debug/
 **/release/
 
-# Python stuff
-**/venv/
-**/env/
-*.pyc
+# Glade temp files
+*.glade~

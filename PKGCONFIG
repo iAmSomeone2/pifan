@@ -7,6 +7,7 @@ pkgver=0.1
 pkgrel=1
 pkgdesc="A small suite of tools to control a 2 or 3-pin fan connected to the Raspberry Pi's GPIO pins."
 arch=('aarch64')
+license=('GPL3')
 
 makedepends=(
     'cmake'
@@ -15,4 +16,4 @@ makedepends=(
     'pkgconf'
     'goobject-introspection'
     'gtk3'
-    'python>=3.7.0')
+    'gtkmm3)

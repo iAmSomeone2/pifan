@@ -8,3 +8,4 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(fan_daemon)
 add_subdirectory(fan_cli)
+add_subdirectory(fan_gui)

@@ -60,7 +60,7 @@ __uint8_t set_target_temp(int target) {
     strcpy(output_str, base_str);
     strcat(output_str, num_str);
     
-    int write_result = fprintf(config_file, output_str);
+    int write_result = fprintf(config_file, "%s", output_str);
     if (write_result <= 0) {
         fprintf(stderr, "Could not write new target temp to %s\n", CONFIG_FILE_PATH);
         fclose(config_file);
