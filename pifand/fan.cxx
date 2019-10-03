@@ -40,6 +40,9 @@ Fan::Fan(int pi, int enablePin, int tachPin, int pwmPin){
     m_running = false;
 }
 
+/*
+    Initializes all fan GPIO pins so that they are correctly configured and inactive.
+*/
 int Fan::initializePins() {
    int result = 0;
    // Set pin modes for fan I/O
@@ -61,15 +64,42 @@ int Fan::initializePins() {
         return result; 
    }
    
+   // Make sure all pins are set to "pull-down" so that nothing is active.
+   result = set_pull_up_down(m_pi, m_enablePin, PI_PUD_DOWN);
+   if (result != 0) {
+        std::cout << "Couldn't set resistor on pin " << m_enablePin << ".\n";
+        return result;
+   }
+   
+   result = set_pull_up_down(m_pi, m_tachPin, PI_PUD_DOWN);
+   if (result != 0) {
+        std::cout << "Couldn't set resistor on pin " << m_tachPin << ".\n";
+        return result;
+   }
+   
+   result = set_pull_up_down(m_pi, m_pwmPin, PI_PUD_DOWN);
+   if (result != 0) {
+        std::cout << "Couldn't set resistor on pin " << m_pwmPin << ".\n";
+        return result;
+   }
+   
    return result;
 }
 
-void Fan::toggleFan() {
+/*
+    Toggles the fan off or on depending on the current state.
+    Returns 0 if successful.
+*/
+int Fan::toggle() {
+    int result;
     if (m_running) {
+        result = gpio_write(m_pi, m_enablePin, 0);
         m_running = false;
     } else {
+        result = gpio_write(m_pi, m_enablePin, 1);
         m_running = true;
     }
+    return result;
 }
 
 bool Fan::isRunning() {

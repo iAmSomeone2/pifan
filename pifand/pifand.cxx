@@ -27,6 +27,8 @@ extern "C" {
 }
 
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include <pifanconfig.h>
 
 #include "fan.hh"
@@ -42,6 +44,11 @@ int main(void) {
     // Create a Fan object to keep track of its operations
     Fan piFan = Fan(rPi, 15, 14, 18);
     
+    piFan.toggle();
+    
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    
+    piFan.toggle();
     
     pigpio_stop(rPi);
     return 0;

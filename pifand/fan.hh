@@ -16,7 +16,7 @@ class Fan {
         
     public:
         Fan(int pi, int enablePin, int tachPin, int pwmPin);
-        void toggleFan();
+        int toggle();
         bool isRunning();
 };
 
