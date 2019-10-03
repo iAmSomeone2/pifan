@@ -18,3 +18,6 @@ _deps
 
 # Glade temp files
 *.glade~
+
+# Project config files
+*.geany
