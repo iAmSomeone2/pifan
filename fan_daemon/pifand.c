@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <signal.h>
+
 #include <pigpiod_if2.h>
 #include <pifanconfig.h>
 
@@ -10,11 +11,11 @@
 #include "data_access.h"
 
 static volatile __uint8_t active = 1;
+static volatile __uint8_t fan_state = 1;
 
 struct tracker_args {
-    int pi;
-    FILE *outfile;
-};
+    int         pi;
+} tracker_args_t;
 
 /*
     Sets active to 0 when a SIGINT or SIGTERM signal is received.
@@ -24,67 +25,58 @@ void interrupt_handler() {
     active = 0;
 }
 
+
 /*
  * Tracks the fan speed using the pigpio lib. Results are written to a
  * temp file that can be accessed by other parts of the program while
  * the daemon is running.
- */
+*/
 void *fan_tracker(void *arguments) {
     struct tracker_args *args = arguments;
     
-    // Capturing these lets us gracefully shutdown
-    signal(SIGINT, interrupt_handler);
-    signal(SIGTERM, interrupt_handler);
-    
-    printf("Tracking fan speed for Pi %d\n", args->pi); 
+    printf("Tracking fan speed for Pi: %d\n", args->pi); 
     /*  
-     * Set up loop to poll the gpio pin connected to the fan tach.
-     * To accurately get the fan speed, we'll have to figure out a
-     * reasonable amount of time to let the loop run while still
-     * getting all of the tach. pulses.
-     */
-     unsigned speed_callback = register_speed_callback(args->pi);
-     while(active) {
-         int rpm = get_fan_speed();
-         printf("Current fan speed: %d RPM\n", rpm);
-         sleep(1);
-     }
-     
+     * Set up shared memory on this thread so that we can share the current
+     * fan speed with other programs in this suite. 
+    */
+    
+    unsigned speed_callback = register_speed_callback(args->pi);
+    while(active) { 
+        if (fan_state == 1) {
+            int rpm = get_fan_speed();
+            if (rpm == 0) {
+                //fprintf(stderr, "Fan reporting %d RPM!\nCheck that it's not obstructed.\n", rpm);
+            } else {
+                fprintf(stdout, "%d\n", rpm);
+            }
+        }
+        sleep(1);
+    }
+    
+    // Clean up
+    
+    // Clear up our callback
     callback_cancel(speed_callback);
+    // Exit the thread
     pthread_exit(NULL);
 }
 
 int main(void) {
-    FILE *fan_speed = fopen(FAN_SPEED_FILE, "w+");
-    if (fan_speed == NULL) {
-        fprintf(stderr, "Could not open %s for writing.\n", FAN_SPEED_FILE);
-    }
+    /*
+     * Put together all initial states, connect to the pigpio daemon, and spawn a
+     * thread for dealing with tracking the fan speed.
+    */
+     
+    // Capturing these lets us gracefully shutdown
+    signal(SIGINT, interrupt_handler);
+    signal(SIGTERM, interrupt_handler);
     
-    __uint8_t fan_state = 0;
     int program_status = 0;
     
     int rPi = pigpio_start(NULL, NULL);
     if (rPi < 0 ) {
         fprintf(stderr, "Failed to connect to pigpio daemon.\n");
         exit(1);
-    }
-    
-    /*
-     * Only start the thread for getting the fan speed if we can open
-     * the output file. 
-     */
-    pthread_t tach_thread;
-    if (fan_speed != NULL) {
-        struct tracker_args args;
-        args.pi = rPi;
-        args.outfile = fan_speed;
-        
-        // Set up thread for reading the fan tach.
-        int rc = pthread_create(&tach_thread, NULL, fan_tracker, (void *)&args);
-        if (rc != 0) {
-            fprintf(stderr, "Unable to create thread %d\n", rc);
-            exit(-1);
-        }
     }
     
     fprintf(stdout, "Successfully connected to pigpio daemon.\n");
@@ -95,11 +87,19 @@ int main(void) {
     if (init_result != 0) {
         exit(init_result);
     }
-
-    // Capturing these lets us gracefully shutdown
-    signal(SIGINT, interrupt_handler);
-    signal(SIGTERM, interrupt_handler);
     
+    // Set up thread for reading the fan tach.
+    pthread_t tach_thread;
+    struct tracker_args args;
+    args.pi = rPi;
+    
+    int rc = pthread_create(&tach_thread, NULL, fan_tracker, (void *)&args);
+    if (rc != 0) {
+        fprintf(stderr, "Unable to create thread %d\n", rc);
+        exit(-1);
+    }
+    
+    // Main loop
     while (active) {
         __uint8_t fan_status = determine_fan_status(rPi);
         if (fan_state != fan_status) {
@@ -117,6 +117,7 @@ int main(void) {
         sleep(DEFAULT_UPDATE_INTERVAL);
     }
 
+    // Clean up
     printf("\nTurning off fan control daemon...\n");
     int enable_result = enable_fan(rPi, 0);
     if (enable_result != 0) {
@@ -125,9 +126,6 @@ int main(void) {
     }
 
     pigpio_stop(rPi);
-    if (fan_speed != NULL) {
-        pthread_join(tach_thread, NULL);
-        fclose(fan_speed);
-    }
+    pthread_join(tach_thread, NULL);
     return program_status;
 }

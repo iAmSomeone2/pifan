@@ -5,6 +5,9 @@
 #define DEFAULT_TARGET_TEMP         50
 
 int cpu_temp();
+
 int get_target_temp();
+
+void *create_shared_memory(size_t size);
 
 #endif

@@ -39,9 +39,9 @@ int initialize_pins(int pi) {
         return result;
     }
 
-    result = set_mode(pi, FAN_SPEED_PIN, PI_INPUT);
+    result = set_mode(pi, FAN_TACH_PIN, PI_INPUT);
     if (result != 0) {
-        fprintf(stderr, "Couldn't set pin mode on pin %d.\n", FAN_SPEED_PIN);
+        fprintf(stderr, "Couldn't set pin mode on pin %d.\n", FAN_TACH_PIN);
         return result;
     }
 
@@ -52,9 +52,9 @@ int initialize_pins(int pi) {
        return result;
     }
 
-    result = set_pull_up_down(pi, FAN_SPEED_PIN, PI_PUD_DOWN);
+    result = set_pull_up_down(pi, FAN_TACH_PIN, PI_PUD_DOWN);
     if (result != 0) {
-        fprintf(stderr, "Couldn't set pull-down on pin %d.\n", FAN_SPEED_PIN);
+        fprintf(stderr, "Couldn't set pull-down on pin %d.\n", FAN_TACH_PIN);
         return result;
     }
 
@@ -88,7 +88,7 @@ void increment_pulse_count(){
  * pin. 
  */
 int register_speed_callback(int pi) {
-    int callback_id = callback(pi, FAN_SPEED_PIN, RISING_EDGE, increment_pulse_count);
+    int callback_id = callback(pi, FAN_TACH_PIN, RISING_EDGE, increment_pulse_count);
     
     switch (callback_id) {
         case pigif_bad_malloc:

@@ -4,6 +4,6 @@
 #cmakedefine CONFIG_FILE_PATH   "@CONFIG_FILE_PATH@"
 #cmakedefine THERMAL_FILE_PATH  "@THERMAL_FILE_PATH@"
 
-#define FAN_SPEED_FILE  "./fan_speed"
+#define FAN_SPEED_MEM  "fan_speed"
 
 #endif

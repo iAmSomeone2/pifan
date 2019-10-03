@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/mman.h>
 
 #include "data_access.h"
 #include <pifanconfig.h>
@@ -47,3 +48,15 @@ int get_target_temp() {
     return target_temp;
 }
 
+/*
+ * Returns a pointer to a segment of shared memory. 
+*/ 
+void *create_shared_memory(size_t size) {
+    // We want the buffer to be read and write enabled.
+    int protection = PROT_READ | PROT_WRITE;
+    
+    // Set visibilty to shared so that our other programs can use it.
+    int visibility = MAP_SHARED;
+    
+    return mmap(NULL, size, protection, visibility, -1, 0);
+}

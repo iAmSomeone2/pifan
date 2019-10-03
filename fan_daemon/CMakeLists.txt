@@ -19,7 +19,7 @@ find_package(Threads REQUIRED)
 
 add_subdirectory(data_access)
 
-add_executable(pifand
+add_executable(pifanx
     pifand.c
     hardware.c
     hardware.h)
@@ -28,6 +28,6 @@ include_directories("/usr/local/include")
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/data_access)
 
-target_link_libraries(pifand ${pigpiod_if2_LIBRARY})
-target_link_libraries(pifand data_access)
-target_link_libraries(pifand Threads::Threads)
+target_link_libraries(pifanx ${pigpiod_if2_LIBRARY})
+target_link_libraries(pifanx data_access)
+target_link_libraries(pifanx Threads::Threads)
