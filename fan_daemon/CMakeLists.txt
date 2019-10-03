@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(pifan C)
+project(pifan)
 
 # Copy the util dir into the build dir
 # and figure out where pifan.conf is

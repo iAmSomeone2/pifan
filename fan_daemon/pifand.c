@@ -15,7 +15,7 @@ static volatile __uint8_t fan_state = 1;
 
 struct tracker_args {
     int         pi;
-} tracker_args_t;
+} ;
 
 /*
     Sets active to 0 when a SIGINT or SIGTERM signal is received.

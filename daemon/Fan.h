@@ -4,9 +4,9 @@
 class Fan {
     private:
         int m_pi;
-        int m_enablePin;
-        int m_tachPin;
-        int m_pwmPin;
+        const unsigned m_enablePin  =   15;
+        const unsigned m_tachPin    =   14;
+        const unsigned m_pwmPin     =   18;
         
         int initializePins();
     
@@ -15,7 +15,7 @@ class Fan {
         bool m_running;
         
     public:
-        Fan(int pi, int enablePin, int tachPin, int pwmPin);
+        Fan(int pi);
         int toggle();
         bool isRunning();
 };

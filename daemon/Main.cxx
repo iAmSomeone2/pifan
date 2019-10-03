@@ -1,5 +1,5 @@
 /*
- * pifand.cxx
+ * main.cxx
  * 
  * Copyright 2019 Brenden Davidson <bdavidson@manjaro-pi>
  * 
@@ -27,29 +27,47 @@ extern "C" {
 }
 
 #include <iostream>
+#include <csignal>
 #include <chrono>
 #include <thread>
 #include <pifanconfig.h>
 
-#include "fan.hh"
+#include "Fan.h"
+#include "DataAccess.h"
 
-int main(void) {
-    int rPi = pigpio_start(NULL, NULL);
+volatile __uint8_t active = 1;
+
+void interruptHandler(int signum) {
+    std::cout << "\nReceived interrupt signal (" << signum << ").\n";
+    active = 0;
+}
+
+int main() {
+    int rPi = pigpio_start(nullptr, nullptr);
     if (rPi < 0) {
         std::cout << "Failed to connect to pigpio daemon." << std::endl;
+        exit(1);
     }
     
     std::cout << "Connected to pigpio daemon." << std::endl;
     
     // Create a Fan object to keep track of its operations
-    Fan piFan = Fan(rPi, 15, 14, 18);
-    
-    piFan.toggle();
-    
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    
-    piFan.toggle();
-    
+    Fan piFan = Fan(rPi);
+    DataAccess data = DataAccess();
+
+    // Register interrupt handler
+    signal(SIGINT, interruptHandler);
+    signal(SIGTERM, interruptHandler);
+
+    // Main program loop
+    while (active) {
+        int currentTemp = data.getCurrentTemp();
+        int targetTemp = data.getTargetTemp();
+
+        std::cout << "Current temp: " << currentTemp << "°C\n";
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+
     pigpio_stop(rPi);
     return 0;
 }

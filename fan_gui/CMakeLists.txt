@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(pifan CXX)
+project(pifan)
 
 # Set up the GUI portion of the project
 set(CMAKE_CXX_STANDARD 17)

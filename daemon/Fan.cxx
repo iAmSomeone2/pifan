@@ -1,5 +1,5 @@
 /*
- * fan.cxx
+ * Fan.cxx
  * 
  * Copyright 2019 Brenden Davidson <bdavidson@manjaro-pi>
  * 
@@ -27,13 +27,10 @@ extern "C" {
 
 #include <iostream>
 
-#include "fan.hh"
+#include "Fan.h"
 
-Fan::Fan(int pi, int enablePin, int tachPin, int pwmPin){
+Fan::Fan(int pi){
     m_pi = pi;
-    m_enablePin = enablePin;
-    m_tachPin = tachPin;
-    m_pwmPin = pwmPin;
     initializePins();
     
     m_speed = 0;
