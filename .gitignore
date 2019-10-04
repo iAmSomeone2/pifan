@@ -12,6 +12,8 @@ CTestTestfile.cmake
 _deps
 
 # Build directories
+cmake-build-debug/
+cmake-build-release/
 **/build/
 **/debug/
 **/release/

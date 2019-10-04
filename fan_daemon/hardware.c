@@ -63,7 +63,7 @@ int initialize_pins(int pi) {
 
 /*
     Determines whether the fan should run or not based on the current CPU
-    temp and the target temp in pifan.conf.
+    temp and the target temp in pifan.json.
 */
 int determine_fan_status() {
     __uint8_t fan_status = 0;

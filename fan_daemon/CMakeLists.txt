@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(pifan)
 
 # Copy the util dir into the build dir
-# and figure out where pifan.conf is
+# and figure out where pifan.json is
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/util DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
 set(CONFIG_FILE_PATH ${CMAKE_CURRENT_BINARY_DIR}/util/pifan.conf)
 

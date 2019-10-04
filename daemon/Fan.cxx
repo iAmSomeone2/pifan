@@ -29,6 +29,10 @@ extern "C" {
 
 #include "Fan.h"
 
+/**
+ * Fan object used for connecting to and managing the cpu fan for the Raspberry Pi.
+ * @param pi pi to connect to with pigpio calls.
+ */
 Fan::Fan(int pi){
     m_pi = pi;
     initializePins();
@@ -37,9 +41,10 @@ Fan::Fan(int pi){
     m_running = false;
 }
 
-/*
-    Initializes all fan GPIO pins so that they are correctly configured and inactive.
-*/
+/**
+ * Sets up all relevant GPIO pins so that they are configured and inactive.
+ * @return 0 if successful, otherwise a pigpio mode failure value.
+ */
 int Fan::initializePins() {
    int result = 0;
    // Set pin modes for fan I/O
@@ -83,10 +88,29 @@ int Fan::initializePins() {
    return result;
 }
 
-/*
-    Toggles the fan off or on depending on the current state.
-    Returns 0 if successful.
-*/
+/**
+ * Sets the state of the fan based on current and target temperatures.
+ * @param currentTemp
+ * @param targetTemp
+ * @return 0 if the operation was successful, otherwise a pigpio mode failure value.
+ */
+int Fan::determineState(int currentTemp, int targetTemp) {
+    int result = 0;
+    if (currentTemp > targetTemp && !m_running) {
+        // Turn on the fan.
+        result = toggle();
+    } else if ((currentTemp <= targetTemp - (m_tempBuffer*1000)) && m_running) {
+        // Turn off the fan
+        result = toggle();
+    }
+
+    return result;
+}
+
+/**
+ * Toggles the fan's state.
+ * @return 0 if successful, otherwise a pigpio mode failure value.
+ */
 int Fan::toggle() {
     int result;
     if (m_running) {
@@ -99,6 +123,10 @@ int Fan::toggle() {
     return result;
 }
 
+/**
+ * Gets current state of the fan.
+ * @return value of this.m_running.
+ */
 bool Fan::isRunning() {
     return m_running;
 }

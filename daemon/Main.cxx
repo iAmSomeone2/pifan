@@ -30,30 +30,62 @@ extern "C" {
 #include <csignal>
 #include <chrono>
 #include <thread>
-#include <pifanconfig.h>
 
 #include "Fan.h"
 #include "DataAccess.h"
 
-volatile __uint8_t active = 1;
+volatile bool active = true;
+volatile int pulseCount = 0;
 
+/**
+ * Lets the program know that it needs to clean up and shutdown.
+ * @param signum interrupt signal value.
+ */
 void interruptHandler(int signum) {
     std::cout << "\nReceived interrupt signal (" << signum << ").\n";
-    active = 0;
+    active = false;
+}
+
+/**
+ * Increments the pulseCount by one.
+ * For use as a pigpio callback.
+ */
+void incrementPulse() {
+    pulseCount++;
 }
 
 int main() {
+    DataAccess data = DataAccess();
+
+    std::cout << "Target temp: " << data.getTargetTemp()/1000 << "°C\n";
+
+    // Connect to pigpio daemon
     int rPi = pigpio_start(nullptr, nullptr);
     if (rPi < 0) {
-        std::cout << "Failed to connect to pigpio daemon." << std::endl;
+        std::cerr << "Failed to connect to pigpio daemon.\nExiting...\n";
         exit(1);
     }
     
-    std::cout << "Connected to pigpio daemon." << std::endl;
-    
+    std::clog << "Connected to pigpio daemon." << std::endl;
+
     // Create a Fan object to keep track of its operations
     Fan piFan = Fan(rPi);
-    DataAccess data = DataAccess();
+
+    // Set up a callback for the fan's tachometer pin.
+    int callbackId = callback(rPi, piFan.m_tachPin, RISING_EDGE, reinterpret_cast<CBFunc_t>(incrementPulse));
+    switch (callbackId) {
+        case pigif_bad_malloc:
+            std::cerr << "Pigpio encountered a bad malloc\n";
+            break;
+        case pigif_duplicate_callback:
+            std::cerr << "Pigpio encountered a duplicate callback\n";
+            break;
+        case pigif_bad_callback:
+            std::cerr << "Pigpio encountered a bad callback\n";
+            break;
+        default:
+            std::clog << "Successfully registered callback for fan speed.\n";
+    }
 
     // Register interrupt handler
     signal(SIGINT, interruptHandler);
@@ -65,6 +97,7 @@ int main() {
         int targetTemp = data.getTargetTemp();
 
         std::cout << "Current temp: " << currentTemp << "°C\n";
+        std::cout << "Target temp: " << targetTemp << "°C\n";
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 

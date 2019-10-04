@@ -6,10 +6,17 @@
 #define PIFAN_DATAACCESS_H
 
 #include <string>
+#include <PiFanConfig.h>
 
 class DataAccess {
 private:
-    const std::string currentTempFile = "/sys/class/thermal/thermal_zone0/temp";
+    const std::string m_temperatureFilePath = THERMAL_FILE_PATH;
+    const std::string m_configFilePath = CONFIG_FILE_PATH;
+    const int m_defaultTargetTemp = 50;
+
+    int m_targetTemp = m_defaultTargetTemp;
+
+    void parseConfigFile();
 public:
     DataAccess();
     int getTargetTemp();

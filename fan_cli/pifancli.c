@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
 }
 
 /*
-    Opens the pifan.conf file and replaces the old target temp with
+    Opens the pifan.json file and replaces the old target temp with
     the new one.
     Returns 1 if the operation was successful. 0, otherwise.
 */
