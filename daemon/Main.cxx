@@ -30,12 +30,15 @@ extern "C" {
 #include <csignal>
 #include <chrono>
 #include <thread>
+#include <ctime>
+
+#include <PiFanConfig.h>
 
 #include "Fan.h"
 #include "DataAccess.h"
 
 volatile bool active = true;
-volatile int pulseCount = 0;
+int pulseCount = 0;
 
 /**
  * Lets the program know that it needs to clean up and shutdown.
@@ -91,16 +94,36 @@ int main() {
     signal(SIGINT, interruptHandler);
     signal(SIGTERM, interruptHandler);
 
+    time_t startTime = 1;
+    int fanSpeed = 0;
     // Main program loop
     while (active) {
         int currentTemp = data.getCurrentTemp();
         int targetTemp = data.getTargetTemp();
 
-        std::cout << "Current temp: " << currentTemp << "°C\n";
-        std::cout << "Target temp: " << targetTemp << "°C\n";
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::cout << "Current temp: " << (float)currentTemp/1000 << "°C\n";
+        std::cout << "Target temp: " << (float)targetTemp/1000 << "°C\n";
+        std::cout << "Current fan speed: " << fanSpeed << " RPM\n";
+        
+        
+        piFan.determineState(currentTemp, targetTemp);
+        
+        // Sleep for a specific time.
+        std::this_thread::sleep_for(std::chrono::seconds(SLEEP_TIME_SECS));
+        
+        // Figure out how fast the fan is spinning.
+        if (time(0) % 2 == 0) {
+            fanSpeed = piFan.getFanSpeed(&pulseCount, startTime);
+            startTime = time(0);
+        }
     }
 
+    std::clog << "Stopping PiFan daemon...\n";
+    
+    if (piFan.isRunning()) {
+        piFan.toggle();
+    }
+    callback_cancel(callbackId);
     pigpio_stop(rPi);
     return 0;
 }

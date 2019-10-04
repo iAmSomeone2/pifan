@@ -6,7 +6,7 @@ project(pifan)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/util DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
 set(CONFIG_FILE_PATH ${CMAKE_CURRENT_BINARY_DIR}/util/pifan.json)
 
-set(THERMAL_FILE_PATH /sys/class/thermal_zone0/temp)
+set(THERMAL_FILE_PATH /sys/class/thermal/thermal_zone0/temp)
 
 configure_file(PiFanConfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/PiFanConfig.h)
 
@@ -22,7 +22,7 @@ link_libraries(${JSONCPP_LIBRARIES})
 add_executable( pifand
         Main.cxx
         Fan.cxx Fan.h
-        DataAccess.cpp DataAccess.h)
+        DataAccess.cxx DataAccess.h)
     
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 

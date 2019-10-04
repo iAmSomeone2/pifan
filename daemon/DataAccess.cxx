@@ -78,5 +78,6 @@ int DataAccess::getCurrentTemp() {
     }
 
     // Convert from text to int
-    return  std::stoi(tempLine);
+    int temp = atoi(tempLine.c_str());
+    return temp;
 }

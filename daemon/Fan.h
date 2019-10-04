@@ -7,7 +7,6 @@ class Fan {
         const int m_tempBuffer = 5;
         
         int initializePins();
-        int toggle();
     
     protected:
         int m_speed;
@@ -20,6 +19,8 @@ class Fan {
 
         Fan(int pi);
         int determineState(int currentTemp, int targetTemp);
+        int toggle();
+        int getFanSpeed(int *pulseCount, time_t initTime);
         bool isRunning();
 };
 

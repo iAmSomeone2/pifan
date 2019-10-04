@@ -26,6 +26,7 @@ extern "C" {
 }
 
 #include <iostream>
+#include <ctime>
 
 #include "Fan.h"
 
@@ -85,6 +86,9 @@ int Fan::initializePins() {
         return result;
    }
    
+   // Send the off signal to the fan enable pin so we know it's off
+   result = gpio_write(m_pi, m_enablePin, 0);
+   
    return result;
 }
 
@@ -121,6 +125,23 @@ int Fan::toggle() {
         m_running = true;
     }
     return result;
+}
+
+/**
+ * Determines the fan's speed based on the number of pulses its tachometer has sent
+ * since the last call to getFanSpeed()
+ * @param *pulseCount pointer to number of pulses since the last call
+ * @param initTime time when tracking started.
+ * @return the fan's speed in RPM 
+ */
+int Fan::getFanSpeed(int *pulseCount, time_t initTime) {
+    time_t stopTime = time(0);
+    
+    int secs = stopTime - initTime;
+    int rpm = (*pulseCount/secs) * 60;
+    
+    *pulseCount = 0;
+    return rpm;
 }
 
 /**
