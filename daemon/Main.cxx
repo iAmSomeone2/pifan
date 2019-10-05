@@ -34,8 +34,8 @@ extern "C" {
 
 #include <PiFanConfig.h>
 
-#include "Fan.h"
-#include "DataAccess.h"
+#include "daemon/hardware/Fan.h"
+#include "daemon/data_access/DataAccess.h"
 
 volatile bool active = true;
 int pulseCount = 0;
@@ -60,7 +60,10 @@ void incrementPulse() {
 int main() {
     DataAccess data = DataAccess();
 
-    std::cout << "Target temp: " << data.getTargetTemp()/1000 << "°C\n";
+    int targetTemp = data.getTargetTemp();
+
+    std::clog << "Target temp: " << targetTemp/1000 << "°C\n";
+    std::clog << "Speed monitor enabled: " << data.monitoringEnabled() << "\n";
 
     // Connect to pigpio daemon
     int rPi = pigpio_start(nullptr, nullptr);
@@ -75,19 +78,22 @@ int main() {
     Fan piFan = Fan(rPi);
 
     // Set up a callback for the fan's tachometer pin.
-    int callbackId = callback(rPi, piFan.m_tachPin, RISING_EDGE, reinterpret_cast<CBFunc_t>(incrementPulse));
-    switch (callbackId) {
-        case pigif_bad_malloc:
-            std::cerr << "Pigpio encountered a bad malloc\n";
-            break;
-        case pigif_duplicate_callback:
-            std::cerr << "Pigpio encountered a duplicate callback\n";
-            break;
-        case pigif_bad_callback:
-            std::cerr << "Pigpio encountered a bad callback\n";
-            break;
-        default:
-            std::clog << "Successfully registered callback for fan speed.\n";
+    int speedCallback = 0;
+    if (data.monitoringEnabled()) {
+        speedCallback = callback(rPi, piFan.m_tachPin, RISING_EDGE, reinterpret_cast<CBFunc_t>(incrementPulse));
+        switch (speedCallback) {
+            case pigif_bad_malloc:
+                std::cerr << "Pigpio encountered a bad malloc\n";
+                break;
+            case pigif_duplicate_callback:
+                std::cerr << "Pigpio encountered a duplicate callback\n";
+                break;
+            case pigif_bad_callback:
+                std::cerr << "Pigpio encountered a bad callback\n";
+                break;
+            default:
+                std::clog << "Successfully registered callback for fan speed.\n";
+        }
     }
 
     // Register interrupt handler
@@ -96,25 +102,24 @@ int main() {
 
     time_t startTime = 1;
     int fanSpeed = 0;
+
     // Main program loop
     while (active) {
         int currentTemp = data.getCurrentTemp();
-        int targetTemp = data.getTargetTemp();
 
         std::cout << "Current temp: " << (float)currentTemp/1000 << "°C\n";
-        std::cout << "Target temp: " << (float)targetTemp/1000 << "°C\n";
-        std::cout << "Current fan speed: " << fanSpeed << " RPM\n";
-        
-        
+
         piFan.determineState(currentTemp, targetTemp);
         
         // Sleep for a specific time.
         std::this_thread::sleep_for(std::chrono::seconds(SLEEP_TIME_SECS));
         
         // Figure out how fast the fan is spinning.
-        if (time(0) % 2 == 0) {
+        if (time(nullptr) % 2 == 0 && data.monitoringEnabled()) {
             fanSpeed = piFan.getFanSpeed(&pulseCount, startTime);
-            startTime = time(0);
+            startTime = time(nullptr);
+
+            std::cout << "Current fan speed: " << fanSpeed << " RPM\n";
         }
     }
 
@@ -123,7 +128,9 @@ int main() {
     if (piFan.isRunning()) {
         piFan.toggle();
     }
-    callback_cancel(callbackId);
+    if (data.monitoringEnabled()){
+        callback_cancel(speedCallback);
+    }
     pigpio_stop(rPi);
     return 0;
 }

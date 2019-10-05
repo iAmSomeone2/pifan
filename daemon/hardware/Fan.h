@@ -17,7 +17,7 @@ class Fan {
         const unsigned m_tachPin    =   14;
         const unsigned m_pwmPin     =   18;
 
-        Fan(int pi);
+        explicit Fan(int pi);
         int determineState(int currentTemp, int targetTemp);
         int toggle();
         int getFanSpeed(int *pulseCount, time_t initTime);

@@ -15,11 +15,13 @@ private:
     const int m_defaultTargetTemp = 50;
 
     int m_targetTemp = m_defaultTargetTemp;
+    bool m_monitorEnabled = true;
 
     void parseConfigFile();
 public:
     DataAccess();
     int getTargetTemp();
+    bool monitoringEnabled();
     int getCurrentTemp();
 };
 

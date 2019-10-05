@@ -1,3 +1,4 @@
 {
-  "targetTemp": 50
+  "targetTemp": 48,
+  "monitorSpeed": false
 }

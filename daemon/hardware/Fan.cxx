@@ -135,7 +135,7 @@ int Fan::toggle() {
  * @return the fan's speed in RPM 
  */
 int Fan::getFanSpeed(int *pulseCount, time_t initTime) {
-    time_t stopTime = time(0);
+    time_t stopTime = time(nullptr);
     
     int secs = stopTime - initTime;
     int rpm = (*pulseCount/secs) * 60;

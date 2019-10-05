@@ -11,20 +11,15 @@ set(THERMAL_FILE_PATH /sys/class/thermal/thermal_zone0/temp)
 configure_file(PiFanConfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/PiFanConfig.h)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-
-find_package(PkgConfig REQUIRED)
 find_package(pigpio REQUIRED)
 
-pkg_check_modules(JSONCPP jsoncpp)
+add_subdirectory(data_access)
+add_subdirectory(hardware)
 
-link_libraries(${JSONCPP_LIBRARIES})
-
-add_executable( pifand
-        Main.cxx
-        Fan.cxx Fan.h
-        DataAccess.cxx DataAccess.h)
+add_executable(pifand Main.cxx)
     
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(pifand ${JSONCPP_LIBRARIES})
 target_link_libraries(pifand ${pigpiod_if2_LIBRARY})
+target_link_libraries(pifand dataAccess)
+target_link_libraries(pifand hardware)

@@ -46,6 +46,7 @@ void DataAccess::parseConfigFile() {
     }
 
     m_targetTemp = (root.get("targetTemp", m_defaultTargetTemp).asInt()) * 1000;
+    m_monitorEnabled = root.get("monitorSpeed", false).asBool();
 }
 
 /**
@@ -55,6 +56,10 @@ void DataAccess::parseConfigFile() {
  */
 int DataAccess::getTargetTemp() {
     return m_targetTemp;
+}
+
+bool DataAccess::monitoringEnabled(){
+    return m_monitorEnabled;
 }
 
 /**
