@@ -1,7 +1,7 @@
 /*
  * Fan.cxx
  * 
- * Copyright 2019 Brenden Davidson <bdavidson@manjaro-pi>
+ * Copyright 2019 Brenden Davidson <davidson.brenden15@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ int Fan::initializePins() {
  */
 int Fan::determineState(int currentTemp, int targetTemp) {
     int result = 0;
-    if (currentTemp > targetTemp && !m_running) {
+    if (currentTemp > (targetTemp + 2000) && !m_running) {
         // Turn on the fan.
         result = toggle();
     } else if ((currentTemp <= targetTemp - (m_tempBuffer*1000)) && m_running) {

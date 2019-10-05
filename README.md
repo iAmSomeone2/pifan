@@ -6,9 +6,14 @@ Currently, the entire project is being shifted over to C++.
 ## pifand
 The daemon used to monitor system temps and activate the fan when the Pi needs to be cooled.
 
-Additional features include:
+### Current features
 * Optional fan speed monitoring
 * Configurable target temperature.
+
+### Planned features
+* Speed control for 4-pin PWM fans.
+* Fan curve support (4-pin PWM fans only).
+
 
 ## target_temp
 A small program used for setting the target temperature of the system and restarting the pifand
