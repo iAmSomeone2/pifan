@@ -4,7 +4,8 @@
 class Fan {
     private:
         int m_pi;
-        const int m_tempBuffer = 5;
+        int m_lowerBuffer = 5;
+        int m_upperBuffer = 1;
         
         int initializePins();
     
@@ -17,7 +18,7 @@ class Fan {
         const unsigned m_tachPin    =   14;
         const unsigned m_pwmPin     =   18;
 
-        explicit Fan(int pi);
+        explicit Fan(int pi, int upperBuffer, int lowerBuffer);
         int determineState(int currentTemp, int targetTemp);
         int toggle();
         int getFanSpeed(int *pulseCount, time_t initTime);

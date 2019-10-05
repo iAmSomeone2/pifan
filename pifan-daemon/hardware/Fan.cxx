@@ -34,12 +34,14 @@ extern "C" {
  * Fan object used for connecting to and managing the cpu fan for the Raspberry Pi.
  * @param pi pi to connect to with pigpio calls.
  */
-Fan::Fan(int pi){
+Fan::Fan(int pi, int upperBuffer, int lowerBuffer){
     m_pi = pi;
     initializePins();
     
     m_speed = 0;
     m_running = false;
+    m_upperBuffer = upperBuffer;
+    m_lowerBuffer = lowerBuffer;
 }
 
 /**
@@ -100,10 +102,10 @@ int Fan::initializePins() {
  */
 int Fan::determineState(int currentTemp, int targetTemp) {
     int result = 0;
-    if (currentTemp > (targetTemp + 2000) && !m_running) {
+    if ((currentTemp > (targetTemp + m_upperBuffer) ) && !m_running) {
         // Turn on the fan.
         result = toggle();
-    } else if ((currentTemp <= targetTemp - (m_tempBuffer*1000)) && m_running) {
+    } else if ((currentTemp <= (targetTemp - m_lowerBuffer)) && m_running) {
         // Turn off the fan
         result = toggle();
     }

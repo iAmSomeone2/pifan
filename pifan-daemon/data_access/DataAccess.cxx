@@ -47,6 +47,8 @@ void DataAccess::parseConfigFile() {
 
     m_targetTemp = (root.get("targetTemp", m_defaultTargetTemp).asInt()) * 1000;
     m_monitorEnabled = root.get("monitorSpeed", false).asBool();
+    m_upperTempBuffer = root.get("upperBuffer", 1).asInt() * 1000;
+    m_lowerTempBuffer = root.get("lowerBuffer", 2).asInt() * 1000;
 }
 
 /**

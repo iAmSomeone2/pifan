@@ -34,8 +34,8 @@ extern "C" {
 
 #include <PiFanConfig.h>
 
-#include "daemon/hardware/Fan.h"
-#include "daemon/data_access/DataAccess.h"
+#include "pifan-daemon/hardware/Fan.h"
+#include "pifan-daemon/data_access/DataAccess.h"
 
 volatile bool active = true;
 int pulseCount = 0;
@@ -75,7 +75,7 @@ int main() {
     std::clog << "Connected to pigpio daemon." << std::endl;
 
     // Create a Fan object to keep track of its operations
-    Fan piFan = Fan(rPi);
+    Fan piFan = Fan(rPi, data.m_upperTempBuffer, data.m_lowerTempBuffer);
 
     // Set up a callback for the fan's tachometer pin.
     int speedCallback = 0;

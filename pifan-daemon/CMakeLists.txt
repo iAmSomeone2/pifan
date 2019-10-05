@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(pifan)
+project(pifan CXX)
 
 include(GNUInstallDirs)
 
@@ -21,7 +21,7 @@ set(THERMAL_FILE_PATH /sys/class/thermal/thermal_zone0/temp)
 
 configure_file(PiFanConfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/PiFanConfig.h)
 
-set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wextra -O0")
+set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wextra -O0 -g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 find_package(pigpio REQUIRED)
