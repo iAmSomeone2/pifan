@@ -1,0 +1,39 @@
+version: 0.2.{build}
+
+image: Ubuntu1804
+
+branches:
+  only:
+  - master
+
+clone_depth: 5
+
+version: '{build}'
+
+platform:
+  - ARM
+
+configuration:
+  - Release
+
+environment:
+  matrix:
+    - generator: "Unix Makefiles"
+
+install:
+  # Make sure that we have or requirements installed
+  apt install pkg-config libjsoncpp-dev libpigpiod-if-dev libgtkmm-3.0-dev
+
+build_script:
+  - cd $APPVEYOR_BUILD_FOLDER
+  - ls
+  - cd ..
+  - mkdir build
+  - cd build
+  # Generate build scripts
+  - cmake $APPVEYOR_BUILD_FOLDER -G "$generator"
+
+  # Build and pack
+  - cmake --build . --target ALL_BUILD --config $configuration
+  - cmake --build . --target PACKAGE --config $configuration 
+  
