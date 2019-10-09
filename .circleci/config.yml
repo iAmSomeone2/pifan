@@ -28,16 +28,19 @@ jobs:
             rm -r pigpio-master
             
       - run:
-          name: Install CMake from source
+          name: Install CMake
           command: |
             export CXX=/usr/bin/clang++
             export CC=/usr/bin/clang
-            wget https://github.com/Kitware/CMake/releases/download/v3.15.4/cmake-3.15.4.tar.gz
-            tar -xzf cmake-3.15.4.tar.gz
-            cd cmake-3.15.4
-            ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release
-            make
-            make install
+            wget https://github.com/Kitware/CMake/releases/download/v3.15.4/cmake-3.15.4-Linux-x86_64.tar.gz
+            tar -xzf cmake-3.15.4-Linux-x86_64.tar.gz
+            cd cmake-3.15.4-Linux-x86_64
+            install -D ./bin/* /bin/
+            install -D ./doc/* /doc/
+            install -D ./man/* /man/
+            install -D ./share/* /share/
+            cmake --version
+            
             
       - run:
           name: Clean CMake files
