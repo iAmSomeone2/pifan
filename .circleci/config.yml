@@ -29,6 +29,7 @@ jobs:
             export CXX=/usr/bin/clang++
             export CC=/usr/bin/clang
             mkdir build
+            ls
             cd build
             # Generate build scripts
             cmake ../pifan/ -G "Unix Makefiles"
