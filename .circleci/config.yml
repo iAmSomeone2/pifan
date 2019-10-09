@@ -9,7 +9,15 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: apt update && apt install -y python3 clang libjsoncpp-dev pkg-config libgtkmm-3.0-dev libpigpiod-if-dev cmake
+          command: |
+            apt update && apt install -y python3 clang libjsoncpp-dev pkg-config libgtkmm-3.0-dev cmake unzip wget
+            
+            # Install pigpio
+            wget https://github.com/joan2937/pigpio/archive/master.zip
+            unzip master.zip
+            cd pigpio-master
+            make
+            sudo make install
 
       - run:
           name: Link JSONCPP to correct location
