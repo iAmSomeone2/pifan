@@ -36,9 +36,7 @@ jobs:
             tar -xzf cmake-3.15.4-Linux-x86_64.tar.gz
             cd cmake-3.15.4-Linux-x86_64
             install -D ./bin/* /usr/bin/
-            install -D ./doc/* /usr/share/doc/
-            install -D ./man/* /usr/share/man/
-            install -D ./share/* /usr/share/
+            #install -D ./share/* /usr/share/
             cmake --version
             
             
