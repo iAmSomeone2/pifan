@@ -20,7 +20,16 @@ environment:
 
 install:
   # Make sure that we have our requirements installed
-  sudo apt install pkg-config libjsoncpp-dev libpigpiod-if-dev libgtkmm-3.0-dev
+  - sudo apt install pkg-config libjsoncpp-dev libgtkmm-3.0-dev
+
+  # Install pigpio
+  - rm master.zip
+  - sudo rm -rf pigpio-master
+  - wget https://github.com/joan2937/pigpio/archive/master.zip
+  - unzip master.zip
+  - cd pigpio-master
+  - make
+  - sudo make install
 
 build_script:
   - cd $APPVEYOR_BUILD_FOLDER
