@@ -9,11 +9,11 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: sudo apt update && sudo apt install -y python3 clang libjsoncpp-dev pkg-config libgtkmm-3.0-dev libpigpiod-if-dev cmake
+          command: apt update && sudo apt install -y python3 clang libjsoncpp-dev pkg-config libgtkmm-3.0-dev libpigpiod-if-dev cmake
 
       - run:
           name: Link JSONCPP to correct location
-          command: sudo ln -s /usr/include/jsoncpp/json/ /usr/include/json
+          command: ln -s /usr/include/jsoncpp/json/ /usr/include/json
       
       - run:
           name: Build application
