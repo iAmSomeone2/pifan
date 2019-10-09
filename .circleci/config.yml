@@ -36,15 +36,16 @@ jobs:
             tar -xzf cmake-3.15.4-Linux-x86_64.tar.gz
             cd cmake-3.15.4-Linux-x86_64
             install -D ./bin/* /usr/bin/
-            #install -D ./share/* /usr/share/
+            install -d /usr/share/cmake-3.15
+            cp -r ./share/cmake-3.15/* /usr/share/cmake-3.15/
             cmake --version
             
             
-      - run:
-          name: Clean CMake files
-          command: |
-            rm cmake-3.15.4.tar.gz
-            rm -r cmake-3.14.4
+      #- run:
+      #    name: Clean CMake files
+      #    command: |
+      #      rm cmake-3.15.4.tar.gz
+      #      rm -r cmake-3.14.4
 
       - run:
           name: Link JSONCPP to correct location
