@@ -5,12 +5,14 @@ jobs:
       - image: debian:stretch
 
     steps:
+      parallelism: 2
       - checkout
 
       - run:
           name: Install dependencies
           command: |
-            apt update && apt install -y python3 clang libjsoncpp-dev pkg-config unzip wget tar build-essential
+            apt update
+            apt install -y python3 clang libjsoncpp-dev pkg-config unzip wget tar build-essential devscripts debhelper
             
       - run:
           name: Install pigpio from source
@@ -59,7 +61,23 @@ jobs:
             mkdir build
             cd build
             # Generate build scripts
-            cmake .. -G "Unix Makefiles"
+            cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=../install
 
             # Build
             cmake --build . --config Release
+            
+      - run:
+          name: Install and tar application
+          command: |
+            mkdir install
+            cd build
+            cmake --install . --config Release
+            
+            # Tarball installed files
+            cd ..
+            tar -cvzf pifan.tar.gz ./install
+            mkdir build-artifacts
+            cp pifan.tar.gz build-artifacts/pifan.tar.gz
+            
+      - store_artifacts:
+          path: ./build-artifacts/
