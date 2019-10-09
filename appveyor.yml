@@ -23,6 +23,8 @@ environment:
 install:
   # Make sure that we have our requirements installed
   - sudo apt install -y pkg-config libjsoncpp-dev libgtkmm-3.0-dev
+  # Fix issue with locating JsonCPP
+  - sudo ln -s /usr/include/jsoncpp/json/ /usr/include/json
 
   # Install pigpio
   - wget https://github.com/joan2937/pigpio/archive/master.zip
