@@ -23,8 +23,6 @@ install:
   - sudo apt install -y pkg-config libjsoncpp-dev libgtkmm-3.0-dev
 
   # Install pigpio
-  - rm master.zip
-  - sudo rm -rf pigpio-master
   - wget https://github.com/joan2937/pigpio/archive/master.zip
   - unzip master.zip
   - cd pigpio-master
