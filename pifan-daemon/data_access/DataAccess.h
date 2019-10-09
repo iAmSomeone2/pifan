@@ -20,8 +20,8 @@ namespace PiFan{
 
         void parseConfigFile();
     public:
-        int m_upperTempBuffer;
-        int m_lowerTempBuffer;
+        int m_upperTempBuffer{};
+        int m_lowerTempBuffer{};
 
         DataAccess();
         int getTargetTemp();

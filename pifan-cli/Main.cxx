@@ -1,17 +1,13 @@
 #include <iostream>
-#include <json/json.h>
 
 #include <PiFanConfig.h>
 #include "Configure/Configure.h"
 
+using namespace PiFan;
 
 
-int main(int argc, char **argv) {
+int main() {
     std::cout << "Pifan config file: " << CONFIG_FILE_PATH << std::endl;
-    std::cout << "Number of args: " << argc << std::endl;
-    std::cout << "Provided args:" << std::endl;
-    for (int i=0; i < argc; i++) {
-        std::cout << "\t* " << argv[i] << std::endl;
-    }
+    Configure config = Configure(CONFIG_FILE_PATH);
     return 0;
 }

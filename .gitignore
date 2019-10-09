@@ -12,8 +12,8 @@ CTestTestfile.cmake
 _deps
 
 # Build directories
-cmake-build-debug/
-cmake-build-release/
+**/cmake-build-debug/
+**/cmake-build-release/
 **/build/
 **/debug/
 **/release/
@@ -23,3 +23,6 @@ cmake-build-release/
 
 # Project config files
 *.geany
+
+# Python virtual environment
+**/venv/
