@@ -5,7 +5,7 @@ jobs:
       - image: debian:stretch
 
     steps:
-      parallelism: 2
+      - parallelism: 2
       - checkout
 
       - run:
