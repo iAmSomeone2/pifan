@@ -8,8 +8,6 @@ branches:
 
 clone_depth: 5
 
-version: '{build}'
-
 platform:
   - ARM
 
