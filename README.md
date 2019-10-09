@@ -1,4 +1,5 @@
 # Pi Fan
+[![Build status](https://ci.appveyor.com/api/projects/status/ctqofpih4y9r6uju?svg=true)](https://ci.appveyor.com/project/iAmSomeone2/pifan)
 A project for running and managing 3 and 4-pin fans connected to the Raspberry Pi's GPIO pins.
 
 Currently, the entire project is being shifted over to C++.
