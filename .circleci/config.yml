@@ -18,6 +18,12 @@ jobs:
             cd pigpio-master
             make
             make install
+            
+      - run:
+          name: Clean pigpio files
+          command: |
+            rm master.zip
+            rm -r pigpio-master
 
       - run:
           name: Link JSONCPP to correct location
@@ -32,7 +38,7 @@ jobs:
             ls
             cd build
             # Generate build scripts
-            cmake ../pifan/ -G "Unix Makefiles"
+            cmake .. -G "Unix Makefiles"
 
             # Build
             cmake --build . --config Release
