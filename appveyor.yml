@@ -19,8 +19,8 @@ environment:
     - generator: "Unix Makefiles"
 
 install:
-  # Make sure that we have or requirements installed
-  apt install pkg-config libjsoncpp-dev libpigpiod-if-dev libgtkmm-3.0-dev
+  # Make sure that we have our requirements installed
+  sudo apt install pkg-config libjsoncpp-dev libpigpiod-if-dev libgtkmm-3.0-dev
 
 build_script:
   - cd $APPVEYOR_BUILD_FOLDER
