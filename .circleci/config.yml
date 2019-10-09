@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: debian:stretch
+    parallelism: 2
 
     steps:
       - restore_cache:
@@ -83,7 +84,7 @@ jobs:
             mkdir build
             cd build
             # Generate build scripts
-            cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=../install
+            cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=../pifan
 
             # Build
             cmake --build . --config Release
@@ -91,15 +92,15 @@ jobs:
       - run:
           name: Install and tar application
           command: |
-            mkdir install
+            mkdir pifan
             cd build
             cmake --install . --config Release
             
             # Tarball installed files
             cd ..
-            tar -cvzf pifan.tar.gz ./install
+            tar -cvzf pifan.tar.gz ./pifan
             mkdir build-artifacts
-            cp pifan.tar.gz build-artifacts/pifan.tar.gz
+            cp pifan.tar.gz build-artifacts/pifan-{{ .Branch }}-{{ .Revision }}.tar.gz
             
       - store_artifacts:
           path: ./build-artifacts/
