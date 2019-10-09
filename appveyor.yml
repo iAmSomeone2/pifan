@@ -44,5 +44,5 @@ build_script:
 
   # Build and pack
   - cmake --build . --config $configuration
-  - cmake --install . --config $configuration 
+  - sudo cmake --install . --config $configuration 
   
