@@ -18,6 +18,8 @@ jobs:
             wget https://github.com/joan2937/pigpio/archive/master.zip
             unzip master.zip
             cd pigpio-master
+            export CXX=/usr/bin/clang++
+            export CC=/usr/bin/clang
             make
             make install
             
