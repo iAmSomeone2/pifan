@@ -1,6 +1,6 @@
 # Pi Fan
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ctqofpih4y9r6uju?svg=true)](https://ci.appveyor.com/project/iAmSomeone2/pifan)
+[![CircleCI](https://circleci.com/gh/iAmSomeone2/pifan/tree/master.svg?style=svg)](https://circleci.com/gh/iAmSomeone2/pifan/tree/master)
 
 A project for running and managing 3 and 4-pin fans connected to the Raspberry Pi's GPIO pins.
 
