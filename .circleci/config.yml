@@ -5,13 +5,36 @@ jobs:
       - image: debian:stretch
 
     steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+            
       - checkout
+
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+
+      - restore_cache:
+          keys:
+            - system-deps
 
       - run:
           name: Install dependencies
           command: |
             apt update
             apt install -y python3 clang libjsoncpp-dev pkg-config unzip wget tar build-essential devscripts debhelper
+            dpkg-query -l >> system-packages.txt
+
+      - save_cache:
+          key: system-deps
+          paths:
+            - "system-packages.txt"
+
             
       - run:
           name: Install pigpio from source
