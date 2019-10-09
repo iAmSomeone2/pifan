@@ -39,6 +39,6 @@ build_script:
   - cmake $APPVEYOR_BUILD_FOLDER -G "$generator"
 
   # Build and pack
-  - cmake --build . --target ALL_BUILD --config $configuration
+  - cmake --build . --target ALL --config $configuration
   - cmake --build . --target PACKAGE --config $configuration 
   
