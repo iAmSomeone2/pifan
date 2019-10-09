@@ -10,7 +10,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt update && apt install -y python3 clang libjsoncpp-dev pkg-config unzip wget tar make
+            apt update && apt install -y python3 clang libjsoncpp-dev pkg-config unzip wget tar build-essential
             
       - run:
           name: Install pigpio from source
@@ -18,8 +18,6 @@ jobs:
             wget https://github.com/joan2937/pigpio/archive/master.zip
             unzip master.zip
             cd pigpio-master
-            export CXX=/usr/bin/clang++
-            export CC=/usr/bin/clang
             make
             make install
             
