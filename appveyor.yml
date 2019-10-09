@@ -20,7 +20,7 @@ environment:
 
 install:
   # Make sure that we have our requirements installed
-  - sudo apt install pkg-config libjsoncpp-dev libgtkmm-3.0-dev
+  - sudo apt install -y pkg-config libjsoncpp-dev libgtkmm-3.0-dev
 
   # Install pigpio
   - rm master.zip
