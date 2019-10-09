@@ -5,7 +5,7 @@ pkgbase=pifan
 pkgname=('pifand' 'pifan-cli' 'pifan-gtk')
 pkgver=0.1
 pkgrel=1
-pkgdesc="A small suite of tools to control a 2 or 3-pin fan connected to the Raspberry Pi's GPIO pins."
+pkgdesc="A small suite of tools to control a 3 or 4-pin fan connected to the Raspberry Pi's GPIO pins."
 arch=('aarch64')
 license=('GPL3')
 
@@ -16,4 +16,5 @@ makedepends=(
     'pkgconf'
     'goobject-introspection'
     'gtk3'
-    'gtkmm3)
+    'gtkmm3'
+    'jsoncpp')

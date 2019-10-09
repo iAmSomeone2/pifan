@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
-project(pifan)
+project(pifan CXX)
 
 # Set up the GUI portion of the project
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra") # Using -Wextra when linking to gtkmm causes a ton of useless output
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
 find_package(PkgConfig REQUIRED)
-set(PKG_CONFIG_PATH /opt/vc/lib/pkgconfig)
+# set(PKG_CONFIG_PATH /opt/vc/lib/pkgconfig)
 pkg_check_modules(GTKMM REQUIRED gtkmm-3.0>=3.20.0)
 
 add_executable(pifan main.cpp pifan_window.cpp pifan_window.hpp)

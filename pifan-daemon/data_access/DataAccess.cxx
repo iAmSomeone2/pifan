@@ -8,6 +8,7 @@
 #include <string>
 
 #include <json/json.h>
+using namespace PiFan;
 
 DataAccess::DataAccess(){
     parseConfigFile();
@@ -22,7 +23,11 @@ void DataAccess::parseConfigFile() {
     std::ifstream configFile;
     configFile.open(m_configFilePath);
     if(!configFile.is_open()) {
-        std::cerr << "Failed to open config file.\n";
+        std::cerr << "Failed to open config file.\nUsing default config.\n";
+        m_targetTemp = m_defaultTargetTemp;
+        m_monitorEnabled = false;
+        m_lowerTempBuffer = 2;
+        m_upperTempBuffer = 1;
         return;
     } else {
         std::string buff;

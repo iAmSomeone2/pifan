@@ -58,7 +58,7 @@ void incrementPulse() {
 }
 
 int main() {
-    DataAccess data = DataAccess();
+    PiFan::DataAccess data = PiFan::DataAccess();
 
     int targetTemp = data.getTargetTemp();
 

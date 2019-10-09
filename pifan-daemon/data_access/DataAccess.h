@@ -8,25 +8,27 @@
 #include <string>
 #include <PiFanConfig.h>
 
-class DataAccess {
-private:
-    const std::string m_temperatureFilePath = THERMAL_FILE_PATH;
-    const std::string m_configFilePath = CONFIG_FILE_PATH;
-    const int m_defaultTargetTemp = 50;
+namespace PiFan{
+    class DataAccess {
+    private:
+        const std::string m_temperatureFilePath = THERMAL_FILE_PATH;
+        const std::string m_configFilePath = CONFIG_FILE_PATH;
+        const int m_defaultTargetTemp = 50;
 
-    int m_targetTemp = m_defaultTargetTemp;
-    bool m_monitorEnabled = true;
+        int m_targetTemp = m_defaultTargetTemp;
+        bool m_monitorEnabled = true;
 
-    void parseConfigFile();
-public:
-    int m_upperTempBuffer;
-    int m_lowerTempBuffer;
+        void parseConfigFile();
+    public:
+        int m_upperTempBuffer;
+        int m_lowerTempBuffer;
 
-    DataAccess();
-    int getTargetTemp();
-    bool monitoringEnabled();
-    int getCurrentTemp();
-};
+        DataAccess();
+        int getTargetTemp();
+        bool monitoringEnabled();
+        int getCurrentTemp();
+    };
+}
 
 
 #endif //PIFAN_DATAACCESS_H
