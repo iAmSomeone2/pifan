@@ -15,6 +15,8 @@ configuration:
   - Release
 
 environment:
+  CXX: /usr/bin/clang++
+  CC: /usr/bin/clang
   matrix:
     - generator: "Unix Makefiles"
 
@@ -39,6 +41,6 @@ build_script:
   - cmake $APPVEYOR_BUILD_FOLDER -G "$generator"
 
   # Build and pack
-  - cmake --build . --target ALL --config $configuration
+  - cmake --build . --config $configuration
   - cmake --build . --target PACKAGE --config $configuration 
   
