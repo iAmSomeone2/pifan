@@ -17,6 +17,7 @@ _deps
 **/build/
 **/debug/
 **/release/
+**/install/
 
 # Glade temp files
 *.glade~
@@ -24,5 +25,7 @@ _deps
 # Project config files
 *.geany
 
-# Python virtual environment
+# Python files
 **/venv/
+**/__pycache__/
+**/*.egg-info/
