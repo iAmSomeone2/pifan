@@ -49,9 +49,28 @@ parts:
       make
       make install
       #mkdir -p $SNAPCRAFT_STAGE/usr/local/lib/
-      cp /usr/local/lib/libpigpiod_if2.so.1 ./libpigpiod_if2.so.1
-      install -d $SNAPCRAFT_STAGE/usr/local/lib/
-      install -D libpigpiod_if2.so.1 $SNAPCRAFT_STAGE/usr/local/lib/
+      cp /usr/local/lib/libpigpiod_if2.so.1 ../libpigpiod_if2.so.1
+      cp /usr/local/lib/libpigpiod_if.so.1 ../libpigpiod_if.so.1
+      cp /usr/local/lib/libpigpio.so.1 ../libpigpio.so.1
+      install -d ../../install/
+      install -D ../libpigpiod_if2.so.1 ../../install/
+      install -D ../libpigpiod_if.so.1 ../../install/
+      install -D ../libpigpio.so.1 ../../install/
+
+    organize:
+      libpigpiod_if2.so.1: usr/local/lib/libpigpiod_if2.so.1
+      libpigpiod_if.so.1: usr/local/lib/libpigpiod_if.so.1
+      libpigpio.so.1: usr/local/lib/libpigpio.so.1
+
+    stage:
+      - usr/local/lib/libpigpiod_if2.so.1
+      - usr/local/lib/libpigpiod_if.so.1
+      - usr/local/lib/libpigpio.so.1
+
+    prime:
+      - usr/local/lib/libpigpiod_if2.so.1
+      - usr/local/lib/libpigpiod_if.so.1
+      - usr/local/lib/libpigpio.so.1
     
     
   # pigpio-libs:
