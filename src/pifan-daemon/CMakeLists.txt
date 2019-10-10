@@ -1,6 +1,3 @@
-cmake_minimum_required(VERSION 3.14)
-project(pifan CXX)
-
 include(GNUInstallDirs)
 
 # Copy the util dir into the build dir
