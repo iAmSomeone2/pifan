@@ -18,6 +18,7 @@ _deps
 **/debug/
 **/release/
 **/install/
+*.snap
 
 # Glade temp files
 *.glade~

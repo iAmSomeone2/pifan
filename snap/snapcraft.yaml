@@ -15,15 +15,15 @@ architectures:
   - build-on: armhf
     run-on: armhf
 
-  - build-on: aarch64
-    run-on: aarch64
+  - build-on: arm64
+    run-on: arm64
 
 grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
   pifand:
-    command: $SNAP/usr/bin/pifand
+    command: bin/pifand
     daemon: simple
     stop-timeout: 10s
 
@@ -73,13 +73,13 @@ parts:
 
     stage-packages:
       - libjsoncpp1
-    
-    filesets:
-      pigpio-libs:
-        - usr/local/lib/libpigpiod_if2.so.1
 
-    prime:
-      - $pigpio-libs
+    # filesets:
+    #   pigpio-libs:
+    #     - $SNAPCRAFT_STAGE/usr/local/lib/libpigpiod_if2.so.1
+        
+    # prime:
+    #   - $pigpio-libs
 
     configflags:
       - -DCMAKE_BUILD_TYPE=Release
