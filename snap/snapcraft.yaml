@@ -19,7 +19,7 @@ architectures:
     run-on: arm64
 
 grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+confinement: strict # use 'strict' once you have the right plugs and slots
 
 apps:
   pifand:
@@ -48,6 +48,20 @@ parts:
       cd pigpio-master
       make
       make install
+      #mkdir -p $SNAPCRAFT_STAGE/usr/local/lib/
+      cp /usr/local/lib/libpigpiod_if2.so.1 ./libpigpiod_if2.so.1
+      install -d $SNAPCRAFT_STAGE/usr/local/lib/
+      install -D libpigpiod_if2.so.1 $SNAPCRAFT_STAGE/usr/local/lib/
+    
+    
+  # pigpio-libs:
+  #   plugin: nil
+  #   after:
+  #     - pigpio
+
+  #   override-build: |
+  #       cp /usr/local/lib/libpigpiod_if2.so.1 ./libpigpiod_if2.so.1
+  #       install -D libpigpiod_if2.so.1 ../install/usr/local/lib/
 
   pifand:
     after:

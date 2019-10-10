@@ -4,8 +4,6 @@
 
 A project for running and managing 3 and 4-pin fans connected to the Raspberry Pi's GPIO pins.
 
-Currently, the entire project is being shifted over to C++.
-
 ## pifand
 
 The daemon used to monitor system temps and activate the fan when the Pi needs to be cooled.
@@ -37,7 +35,6 @@ The GTK+ app for managing the pifand daemon.
 * pkg-config
 * libjsoncpp-dev
 * libpigpiod-if-dev
-* libgtkmm-3.0-dev
 
 ### Arch Linux and Manjaro
 
@@ -45,4 +42,3 @@ The GTK+ app for managing the pifand daemon.
 * pkgconf (included in base-devel group)
 * jsoncpp
 * python-pigpio ([AUR package](https://aur.archlinux.org/packages/python-pigpio))
-* gtkmm3
