@@ -1,6 +1,3 @@
-cmake_minimum_required(VERSION 3.14)
-project(pifan)
-
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
 find_package(pigpio REQUIRED)
