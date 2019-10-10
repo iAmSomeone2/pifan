@@ -8,9 +8,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/PiFan)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs)
 
 #add_subdirectory(include)
-find_package(Python3 3.6 REQUIRED
-        COMPONENTS Interpreter Development
-        OPTIONAL_COMPONENTS Compiler)
+#find_package(Python3 3.6 REQUIRED
+#        COMPONENTS Interpreter Development
+#        OPTIONAL_COMPONENTS Compiler)
 
 add_subdirectory(src)
 

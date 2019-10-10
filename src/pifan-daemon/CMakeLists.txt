@@ -42,17 +42,10 @@ install(TARGETS pifand
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
         
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifan.json
-        TYPE SYSCONF
+        DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}
         CONFIGURATIONS Release)
 
-if (${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/local")
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifand.service
-                DESTINATION /lib/systemd/system/
-                CONFIGURATIONS Release)
-else()
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifand.service
-                DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/systemd/system/
-                CONFIGURATIONS Release)
-endif()
-        
 
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifand.service
+        DESTINATION /lib/systemd/system/
+        CONFIGURATIONS Release)
