@@ -33,6 +33,8 @@ add_subdirectory(hardware)
 add_executable(pifand Main.cxx)
     
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/hardware)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/data_access)
 
 target_link_libraries(pifand ${pigpiod_if2_LIBRARY})
 target_link_libraries(pifand dataAccess)
@@ -45,7 +47,15 @@ install(TARGETS pifand
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifan.json
         TYPE SYSCONF
         CONFIGURATIONS Release)
+
+if (${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/local")
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifand.service
+                DESTINATION /lib/systemd/system/
+                CONFIGURATIONS Release)
+else()
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifand.service
+                DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/systemd/system/
+                CONFIGURATIONS Release)
+endif()
         
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifand.service
-        DESTINATION /lib/systemd/system/
-        CONFIGURATIONS Release)
+

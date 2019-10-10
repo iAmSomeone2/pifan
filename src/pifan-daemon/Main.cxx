@@ -34,8 +34,8 @@ extern "C" {
 
 #include <PiFanConfig.h>
 
-#include "pifan-daemon/hardware/Fan.h"
-#include "pifan-daemon/data_access/DataAccess.h"
+#include "Fan.h"
+#include "DataAccess.h"
 
 volatile bool active = true;
 int pulseCount = 0;

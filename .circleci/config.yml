@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: debian:stretch
-    parallelism: 2
+    parallelism: 1
 
     steps:
       - restore_cache:
@@ -64,13 +64,6 @@ jobs:
             install -d /usr/share/cmake-3.15
             cp -r ./share/cmake-3.15/* /usr/share/cmake-3.15/
             cmake --version
-            
-            
-      #- run:
-      #    name: Clean CMake files
-      #    command: |
-      #      rm cmake-3.15.4.tar.gz
-      #      rm -r cmake-3.14.4
 
       - run:
           name: Link JSONCPP to correct location
@@ -100,7 +93,7 @@ jobs:
             cd ..
             tar -cvzf pifan.tar.gz ./pifan
             mkdir build-artifacts
-            cp pifan.tar.gz build-artifacts/pifan-{{ .Branch }}-{{ .Revision }}.tar.gz
+            cp pifan.tar.gz build-artifacts/pifan.tar.gz
             
       - store_artifacts:
           path: ./build-artifacts/
