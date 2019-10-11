@@ -23,6 +23,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 find_package(pigpio REQUIRED)
 find_package(Threads REQUIRED)
+find_package(Boost 1.29.0 REQUIRED COMPONENTS
+             filesystem)
 
 # Build sub-modules
 add_subdirectory(data_access)
@@ -33,11 +35,13 @@ add_executable(pifand Main.cxx)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/hardware)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/data_access)
+include_directories(${Boost_INCLUDE_DIRS})
 
 target_link_libraries(pifand ${pigpiod_if2_LIBRARY})
 target_link_libraries(pifand dataAccess)
 target_link_libraries(pifand hardware)
 target_link_libraries(pifand ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(pifand Boost::filesystem)
 
 # Installation settings
 install(TARGETS pifand 

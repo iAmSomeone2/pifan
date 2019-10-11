@@ -34,13 +34,22 @@ extern "C" {
 #include <chrono>
 #include <thread>
 #include <ctime>
+#include <sstream>
+
+// Boost libs
+#include <boost/filesystem.hpp>
+#include <boost/format.hpp>
 
 #include <PiFanConfig.h>
 
 #include "Fan.h"
 #include "DataAccess.h"
 
-const std::string socketPath = "/run/user/1000/pifand/pifand-socket";
+using namespace boost;
+
+const static std::string socketBaseDir = "/run/user/";
+const static std::string socketAppendPath = "/pifand/";
+const static std::string socketName = "pifand-socket";
 
 volatile bool active = true;
 int pulseCount = 0;
@@ -63,14 +72,40 @@ void incrementPulse() {
 }
 
 /**
+ * Bundles constants along with environment variables to create the full directory path
+ * for the daemon socket.
+ * @return a path object representing the directory in which to put the socket
+ */
+filesystem::path getSocketPath() {
+    // Create path based on user id
+    int uid = getuid();
+    std::ostringstream pathBuffer;
+
+    pathBuffer << format("%s%u%s") % socketBaseDir % uid % socketAppendPath;
+
+    filesystem::path socketPath(pathBuffer.str());
+
+    // Check if path exists and create it if it does not
+    if (!filesystem::exists(socketPath)) {
+        try {
+            filesystem::create_directories(socketPath);
+        } catch (const filesystem::filesystem_error& error) {
+            std::cerr << format("Couldn't create directory: %s\n") % socketPath.string();
+            exit(-2);
+        }
+    }
+
+    return socketPath;
+}
+
+/**
  * Set up and monitor socket for allowing external programs to change values in
  * the configuration file.
  */
 void configSocket() {
-    int uid = getuid(); // Add uid to socket path.
     std::clog << "Setting up socket..." << std::endl;
-
-    struct sockaddr_un addr;
+    // Initialized to make compiler happy
+    struct sockaddr_un addr = {.sun_family=AF_UNIX, .sun_path="\0"};
 
     int fd, cl, rc;
 
@@ -81,6 +116,10 @@ void configSocket() {
 
     memset(&addr, 0, sizeof(addr));
     addr.sun_family = AF_UNIX;
+
+    // Get path for socket
+    filesystem::path socketPath = getSocketPath();
+    socketPath.append(socketName);
 
     // Set up and link socket file
     strncpy(addr.sun_path, socketPath.c_str(), sizeof(addr.sun_path)-1);
