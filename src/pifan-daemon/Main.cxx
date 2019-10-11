@@ -23,7 +23,10 @@
 
 
 extern "C" {
-    #include <pigpiod_if2.h>
+#include <pigpiod_if2.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 }
 
 #include <iostream>
@@ -36,6 +39,8 @@ extern "C" {
 
 #include "Fan.h"
 #include "DataAccess.h"
+
+const std::string socketPath = "/run/user/1000/pifand/pifand-socket";
 
 volatile bool active = true;
 int pulseCount = 0;
@@ -57,6 +62,64 @@ void incrementPulse() {
     pulseCount++;
 }
 
+/**
+ * Set up and monitor socket for allowing external programs to change values in
+ * the configuration file.
+ */
+void configSocket() {
+    int uid = getuid(); // Add uid to socket path.
+    std::clog << "Setting up socket..." << std::endl;
+
+    struct sockaddr_un addr;
+
+    int fd, cl, rc;
+
+    if ( (fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
+        std::cerr << "Socket error" << std::endl;
+        exit(-1);
+    }
+
+    memset(&addr, 0, sizeof(addr));
+    addr.sun_family = AF_UNIX;
+
+    // Set up and link socket file
+    strncpy(addr.sun_path, socketPath.c_str(), sizeof(addr.sun_path)-1);
+    unlink(socketPath.c_str());
+
+    if (bind(fd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
+        std::cerr << "Bind error" << std::endl;
+        exit(-1);
+    }
+
+    if (listen(fd, 5) == -1) {
+        std::cerr << "Listen error" << std::endl;
+        exit(-1);
+    }
+
+    while (true) {
+        if ((cl = accept(fd, nullptr, nullptr)) == -1) {
+            std::cerr << "accept error" << std::endl;
+            continue;
+        }
+
+        // For now, just print whatever gets sent to the socket
+        char buffer[128];
+        while ( (rc = read(cl, buffer, sizeof(buffer))) > 0) {
+            printf("Read %u bytes: %.*s\n", rc, rc, buffer);
+        }
+
+        if (rc == -1) {
+            std::cerr << "Read error" << std::endl;
+            exit(-1);
+        } else if (rc == 0) {
+            std::cout << "EOF" << std::endl;
+            close(cl);
+        }
+
+        return;
+    }
+}
+
 int main() {
     PiFan::DataAccess data = PiFan::DataAccess();
 
@@ -64,6 +127,9 @@ int main() {
 
     std::clog << "Target temp: " << targetTemp/1000 << "°C\n";
     std::clog << "Speed monitor enabled: " << data.monitoringEnabled() << "\n";
+
+    // Set up socket control thread
+    std::thread socketThread (configSocket);
 
     // Connect to pigpio daemon
     int rPi = pigpio_start(nullptr, nullptr);
@@ -124,6 +190,9 @@ int main() {
     }
 
     std::clog << "Stopping PiFan daemon...\n";
+
+    // Sync threads before exiting
+    socketThread.join();
     
     if (piFan.isRunning()) {
         piFan.toggle();

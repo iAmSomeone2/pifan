@@ -22,6 +22,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wextra -O0 -g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 find_package(pigpio REQUIRED)
+find_package(Threads REQUIRED)
 
 # Build sub-modules
 add_subdirectory(data_access)
@@ -36,6 +37,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/data_access)
 target_link_libraries(pifand ${pigpiod_if2_LIBRARY})
 target_link_libraries(pifand dataAccess)
 target_link_libraries(pifand hardware)
+target_link_libraries(pifand ${CMAKE_THREAD_LIBS_INIT})
 
 # Installation settings
 install(TARGETS pifand 
