@@ -19,6 +19,8 @@ _deps
 **/release/
 **/install/
 *.snap
+**/_build-arch_linux/*
+!**/_build-arch_linux/PKGBUILD
 
 # Glade temp files
 *.glade~

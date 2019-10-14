@@ -1,0 +1,58 @@
+# Maintainer: Brenden Davidson <davidson.brenden15@gmail.com>
+# Contributor: Brenden Davidson <davidson.brenden15@gmail.com>
+
+pkgbase=pifan
+pkgname=('pifand')
+pkgver=0.1
+pkgrel=1
+pkgdesc="A small suite of tools to control a 3 or 4-pin fan connected to the Raspberry Pi's GPIO pins."
+arch=('aarch64' 'x86_64')
+license=('GPL3')
+
+makedepends=(
+    'cmake'
+    'git'
+    'clang'
+    'python-pigpio'
+    'pkgconf'
+    'jsoncpp'
+    'boost>=1.29.0'
+    'boost-libs>=1.29.0')
+
+depends=(
+    'python-pigpio'
+    'jsoncpp'
+    'boost-libs>=1.29.0'
+)
+
+source=('pifan::git+https://github.com/iAmSomeone2/pifan.git')
+sha256sums=('SKIP')
+
+prepare() {
+    cd pifan
+    git checkout socket
+    # We need to remember to switch to an actual version or master branch later.
+    cd ..
+    if [ ![ -d build ] ]; then
+        mkdir build
+    fi
+}
+
+build() {
+    cd build
+    export CXX=/usr/bin/clang++
+    export CC=/usr/bin/clang
+    
+    cmake ../pifan -DCMAKE_BUILD_TYPE=Release
+
+    make
+}
+
+package_pifand() {
+    provides=('pifand')
+    conflicts=('pifand')
+
+    install -Dm 644 pifan/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    
+    make DESTDIR="${pkgdir}" -C build/pifan-daemon install
+}
