@@ -35,7 +35,10 @@ Connector::Connector() {
     this->m_fullSocketPath.append(SOCKET_NAME);
 
     // Set up connection to socket
-    struct sockaddr_un addr = {.sun_family=AF_UNIX, .sun_path="\0"};
+    struct sockaddr_un addr = {
+        AF_UNIX,
+        "\0"
+    };
 
     if ((this->m_socketDescriptor = socket(AF_UNIX, SOCK_STREAM, 0)) == -1){
         std::cerr << format("Error with socket at %s\n") % this->m_fullSocketPath;

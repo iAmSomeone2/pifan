@@ -30,6 +30,7 @@ sha256sums=('SKIP')
 prepare() {
     cd pifan
     git checkout socket
+    git pull
     # We need to remember to switch to an actual version or master branch later.
     cd ..
     if [ -d "build" ]; then
