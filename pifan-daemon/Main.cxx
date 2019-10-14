@@ -106,8 +106,8 @@ void configSocket() {
     std::clog << "Setting up socket..." << std::endl;
     // Initialized to make compiler happy
     struct sockaddr_un addr = {
-        .sun_family=AF_UNIX,
-        .sun_path="\0"
+        AF_UNIX,
+        "\0"
     };
 
     int fd, cl, rc;
