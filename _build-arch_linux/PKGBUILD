@@ -27,6 +27,10 @@ depends=(
 source=('pifan::git+https://github.com/iAmSomeone2/pifan.git')
 sha256sums=('SKIP')
 
+install='pifan.install'
+
+backup=('usr/local/etc/pifan.json')
+
 prepare() {
     cd pifan
     git checkout socket
@@ -43,9 +47,7 @@ prepare() {
 
 build() {
     cd build
-    
     cmake ../pifan -DCMAKE_BUILD_TYPE=Release
-
     make
 }
 

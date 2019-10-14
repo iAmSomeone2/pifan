@@ -1,0 +1,42 @@
+# This is a default template for a post-install scriptlet.
+# Uncomment only required functions and remove any functions
+# you don't need (and this header).
+
+## arg 1:  the new package version
+pre_install() {
+	getent group pifan >/dev/null || groupadd -f -r pifan
+	
+	if ! getent passwd pifan >/dev/null; then
+	    useradd -r -g pifan -M -s /sbin/nologin -c "PiFan system user" pifan 
+	fi
+	
+	exit(0)
+}
+
+## arg 1:  the new package version
+#post_install() {
+#    groupadd pifan
+#	useradd -M -N --system pifan
+#}
+
+## arg 1:  the new package version
+## arg 2:  the old package version
+#pre_upgrade() {
+	# do something here
+#}
+
+## arg 1:  the new package version
+## arg 2:  the old package version
+#post_upgrade() {
+	# do something here
+#}
+
+## arg 1:  the old package version
+#pre_remove() {
+	# do something here
+#}
+
+## arg 1:  the old package version
+#post_remove() {
+	# do something here
+#}

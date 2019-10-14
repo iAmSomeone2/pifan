@@ -21,6 +21,7 @@ _deps
 *.snap
 **/_build-arch_linux/*
 !**/_build-arch_linux/PKGBUILD
+!**/_build-arch_linux/pifan.install
 
 # Glade temp files
 *.glade~
