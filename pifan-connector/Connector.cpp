@@ -14,7 +14,7 @@ extern "C" {
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 
-#include "Connector.h"
+#include "include/Connector.h"
 
 using namespace boost;
 
