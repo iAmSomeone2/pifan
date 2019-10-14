@@ -5,6 +5,10 @@ Description="Raspberry Pi CPU fan service."
 WantedBy=multi-user.target
 
 [Service]
+User=pifan
+Group=pifan
 Type=simple
 ExecStart=/usr/local/bin/pifand
+StandardOutput=null
+StandardError=journal
 TimeoutSec=20

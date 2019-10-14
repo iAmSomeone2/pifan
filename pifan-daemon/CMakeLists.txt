@@ -53,5 +53,5 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifan.json
 
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifand.service
-        DESTINATION /lib/systemd/system/
+        DESTINATION /usr/lib/systemd/system/
         CONFIGURATIONS Release)

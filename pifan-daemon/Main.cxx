@@ -105,7 +105,10 @@ filesystem::path getSocketPath() {
 void configSocket() {
     std::clog << "Setting up socket..." << std::endl;
     // Initialized to make compiler happy
-    struct sockaddr_un addr = {.sun_family=AF_UNIX, .sun_path="\0"};
+    struct sockaddr_un addr = {
+        .sun_family=AF_UNIX,
+        .sun_path="\0"
+    };
 
     int fd, cl, rc;
 
