@@ -27,6 +27,8 @@ _deps
 
 # Project config files
 *.geany
+*.kdev4
+**/.kdev4/
 
 # Python files
 **/venv/
