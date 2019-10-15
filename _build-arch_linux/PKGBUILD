@@ -2,7 +2,7 @@
 # Contributor: Brenden Davidson <davidson.brenden15@gmail.com>
 
 pkgbase=pifan
-pkgname=('pifand')
+pkgname=('pifand' 'pifan-connector')
 pkgver=0.1
 pkgrel=1
 pkgdesc="A small suite of tools to control a 3 or 4-pin fan connected to the Raspberry Pi's GPIO pins."
@@ -58,4 +58,11 @@ package_pifand() {
     install -Dm 644 pifan/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
     
     make DESTDIR="${pkgdir}" -C build/pifan-daemon install
+}
+
+package_pifan-connector() {
+    provides=('pifan-connector')
+    conflicts=('pifan-connector')
+
+    make DESTDIR="${pkgdir}" -C build/pifan-connector install
 }
