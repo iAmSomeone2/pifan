@@ -23,7 +23,7 @@ install(TARGETS pifan-connector EXPORT ConnectorConfig
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-install(FILES ${CMAKE_BINARY_DIR}/pifan-connector.pc
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pifan-connector.pc
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
 
 install(EXPORT ConnectorConfig DESTINATION share/Connector/cmake)
