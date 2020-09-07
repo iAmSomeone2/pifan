@@ -1,10 +1,7 @@
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+add_library(pifan-hardware STATIC Fan.cpp Fan.hpp Gpio.cpp Gpio.hpp Pin.cpp Pin.hpp)
 
-find_package(pigpio REQUIRED)
+target_include_directories(pifan-hardware PUBLIC SYSTEM ${pigpio_INCLUDE_DIRS})
 
-add_library(hardware STATIC Fan.cxx Fan.h)
-
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/../)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-target_link_libraries(hardware ${pigpiod_if2_LIBRARY})
+target_link_libraries(pifan-hardware
+    ${pigpiod_if2_LIBRARY}
+)

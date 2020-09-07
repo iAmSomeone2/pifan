@@ -1,9 +1,7 @@
-#ifndef PIFANCONFIG_HH
-#define PIFANCONFIG_HH
+#pragma once
 
 #cmakedefine THERMAL_FILE_PATH "@THERMAL_FILE_PATH@"
 #cmakedefine CONFIG_FILE_PATH "@CONFIG_FILE_PATH@"
 
 #define SLEEP_TIME_SECS 1 
 
-#endif // PIFANCONFIG_HH

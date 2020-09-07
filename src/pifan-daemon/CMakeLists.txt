@@ -16,34 +16,35 @@ endif()
 # This never changes regardless of config type.
 set(THERMAL_FILE_PATH /sys/class/thermal/thermal_zone0/temp)
 
-configure_file(PiFanConfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/PiFanConfig.h)
-
-set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wextra -O0 -g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+configure_file(PiFanConfig.hpp.in PiFanConfig.hpp)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 find_package(pigpio REQUIRED)
 
 # Build sub-modules
-add_subdirectory(data_access)
 add_subdirectory(hardware)
 
-add_executable(pifand Main.cxx)
-    
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/hardware)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/data_access)
+add_executable(pifand main.cpp)
 
-target_link_libraries(pifand ${pigpiod_if2_LIBRARY})
-target_link_libraries(pifand dataAccess)
-target_link_libraries(pifand hardware)
+target_link_libraries(pifand
+        ${pigpiod_if2_LIBRARY}
+        pifan-hardware
+)
+
+target_include_directories(pifand PUBLIC SYSTEM
+        ${pigpio_INCLUDE_DIRS}
+)
+target_include_directories(pifand PRIVATE
+        ./hardware
+)
 
 # Installation settings
 install(TARGETS pifand 
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
         
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifan.json
-        DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}
-        CONFIGURATIONS Release)
+# install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifan.json
+#         DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}
+#         CONFIGURATIONS Release)
 
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/util/pifand.service

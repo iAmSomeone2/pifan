@@ -6,5 +6,5 @@ WantedBy=multi-user.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/pifand
+ExecStart=@CMAKE_INSTALL_BINDIR@/pifand
 TimeoutSec=20
